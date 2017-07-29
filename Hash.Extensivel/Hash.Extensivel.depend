@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1501366755 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.c
+	"bucket.h"
+
+1501367554 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.h
+	"constants.h"
+
+1501366105 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\main.c
+	<stdio.h>
+	<stdlib.h>
+	"bucket.h"
+
+1501367652 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\constants.h
+
