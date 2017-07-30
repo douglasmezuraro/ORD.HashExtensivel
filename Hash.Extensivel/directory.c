@@ -2,9 +2,9 @@
 #include "bucket.h"
 #include <stdbool.h>
 
-bool op_find(int key, Bucket * foundBucket, Directory directory) {
+bool op_find(int key, Bucket * foundBucket, Directory * directory) {
     int address = makeAddress(key, BUCKET_DEPTH);
-    foundBucket = directory.values[address];
+    foundBucket = directory->values[address];
 
     for(int i = 0; i < foundBucket->count; i++)
         if(foundBucket->keys[i] == key)
@@ -13,17 +13,19 @@ bool op_find(int key, Bucket * foundBucket, Directory directory) {
     return false;
 }
 
-bool op_add(int key, Directory directory) {
-    Bucket bucket = newBucket();
+bool op_add(int key, Directory * directory) {
+    Bucket bucket;
 
     if(op_find(key, &bucket, directory))
         return false;
-    else
+    else {
         bk_add_key(key, &bucket, directory);
+        return true;
+    }
 }
 
 // Buckets
-void bk_add_key(int key, Bucket * bucket, Directory directory) {
+void bk_add_key(int key, Bucket * bucket, Directory * directory) {
     if(bucket->count < TAM_MAX_BUCKET) {
         bucket->keys[bucket->count] = key;
         bucket->count++;
@@ -34,8 +36,8 @@ void bk_add_key(int key, Bucket * bucket, Directory directory) {
     }
 }
 
-void bk_split(Bucket * bucket, Directory directory) {
-    if(bucket->depth == directory.deepth) {
+void bk_split(Bucket * bucket, Directory * directory) {
+    if(bucket->depth == directory->deepth) {
         Bucket newBucket;
         int newStart, newEnd;
 
@@ -47,7 +49,7 @@ void bk_split(Bucket * bucket, Directory directory) {
     }
 }
 
-void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory directory) {
+void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * directory) {
     int mask,
         sharedAddress,
         newShared,
@@ -57,7 +59,7 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory dire
     sharedAddress = makeAddress(oldBucket->keys[0], oldBucket->depth);
     newShared     = sharedAddress<1;
     newShared     = newShared|mask;
-    bitsToFill    = directory.deepth - (oldBucket->depth + 1);
+    bitsToFill    = directory->deepth - (oldBucket->depth + 1);
     newStart      = newEnd = newShared;
 
     for(int i = 1; i <= bitsToFill; i++) {
@@ -67,9 +69,9 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory dire
     }
 }
 
-void dir_ins_bucket(Bucket * bucket, int start, int end, Directory directory) {
+void dir_ins_bucket(Bucket * bucket, int start, int end, Directory * directory) {
     for(int i = start; i <= end; i++)
-        directory.values[i] = bucket;
+        directory->values[i] = bucket;
 }
 
 Bucket newBucket(void) {

@@ -1,2 +1,16 @@
 
 *.layout
+
+Hash\.Extensivel/Hash\.Extensivel\.depend
+
+Hash\.Extensivel/bin/Debug/Hash\.exe
+
+Hash\.Extensivel/obj/Debug/main\.o
+
+Hash\.Extensivel/obj/Debug/directory\.o
+
+*.o
+
+*.depend
+
+*.exe

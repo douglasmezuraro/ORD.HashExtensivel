@@ -14,7 +14,7 @@ bool readFile(void) {
     while(!feof(file)) {
         int key = getKey(file);
         inicialization(key);
-        op_add(key, dir);
+        op_add(key, &dir);
     }
     return true;
 }
@@ -26,11 +26,13 @@ void inicialization(int key) {
     }
     else dir.deepth = (int)log2(dir.count);
 
-    int index = makeAddress(key, BUCKET_DEPTH);
+    int address = makeAddress(key, BUCKET_DEPTH);
 
-    DirCell dirCell = (Bucket *)malloc(sizeof(Bucket));
-    dir.values = (DirCell *)malloc(sizeof(DirCell));
-    dir.values[index] = dirCell;
+    DirCell d = (Bucket *)malloc(sizeof(Bucket));
+    *d = newBucket();
+
+    //dir.values[address] = (DirCell *)malloc(sizeof(DirCell));
+    dir.values[address] = d;
     dir.count++;
 }
 
