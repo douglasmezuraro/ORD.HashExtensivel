@@ -2,29 +2,40 @@
 1501366755 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.c
 	"bucket.h"
 
-1501367554 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.h
+1501377530 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.h
 	"constants.h"
+	"directory.h"
 
-1501371458 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\main.c
+1501437007 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
+	<math.h>
 	"bucket.h"
 	"constants.h"
 	"hash.h"
 
-1501369834 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\constants.h
+1501374388 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\constants.h
 
 1501368608 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\hash.c
 	"hash.h"
 
 1501368291 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\hash.h
 
-1501373028 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.c
+1501374839 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.c
 	<stdio.h>
 	<stdbool.h>
 	"file.utils.h"
 
-1501371443 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.h
+1501373459 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.h
 	<stdbool.h>
+
+1501437738 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\directory.c
+	"directory.h"
+	"bucket.h"
+	<stdbool.h>
+
+1501436937 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\directory.h
+	<stdbool.h>
+	"bucket.h"
 

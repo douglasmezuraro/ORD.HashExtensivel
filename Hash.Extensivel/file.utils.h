@@ -4,6 +4,6 @@
 #include <stdbool.h>
 
 bool endOfFile(FILE * file);
-long getKey(FILE * file);
+int getKey(FILE * file);
 
 #endif

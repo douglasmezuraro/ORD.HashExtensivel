@@ -31,11 +31,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="bucket.c">
+		<Unit filename="constants.h" />
+		<Unit filename="directory.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="bucket.h" />
-		<Unit filename="constants.h" />
+		<Unit filename="directory.h" />
+		<Unit filename="file.utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="file.utils.h" />
 		<Unit filename="hash.c">
 			<Option compilerVar="CC" />
 		</Unit>

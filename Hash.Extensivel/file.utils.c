@@ -12,18 +12,20 @@ bool endOfFile(FILE * file) {
     }
 }
 
-long getKey(FILE * file) {
+int getKey(FILE * file) {
     char text[100] = "";
+    char aux;
     int i = 0;
 
     if(!endOfFile(file)) {
         do {
             text[i] = fgetc(file);
+            aux = text[i];
             i++;
-        } while(text[i - 1] != '\n');
+        } while((aux != '\n') && (aux != EOF));
     }
 
     text[i] = '\0';
 
-    return atol(text);
+    return atoi(text);
 }
