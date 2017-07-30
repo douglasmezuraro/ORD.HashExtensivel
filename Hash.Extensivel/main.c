@@ -3,17 +3,19 @@
 #include <stdbool.h>
 #include "bucket.h"
 #include "constants.h"
+#include "hash.h"
 
 bool readFile(void) {
     FILE * file = fopen(FILE_NAME, "r");
 
+    while(!feof(file)) {
+        long key = getKey(file);
 
+        printf("%i = %i\n", key, makeAddress(key, BUCKET_DEPTH));
+    }
     return true;
 }
 
 void main(void) {
-    if(readFile())
-        exit(EXIT_SUCCESS);
-    else
-        exit(EXIT_FAILURE);
+    readFile();
 }

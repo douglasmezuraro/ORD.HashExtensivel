@@ -5,10 +5,26 @@
 1501367554 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\bucket.h
 	"constants.h"
 
-1501366105 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\main.c
+1501371458 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\main.c
 	<stdio.h>
 	<stdlib.h>
+	<stdbool.h>
 	"bucket.h"
+	"constants.h"
+	"hash.h"
 
-1501367652 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\constants.h
+1501369834 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\constants.h
+
+1501368608 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\hash.c
+	"hash.h"
+
+1501368291 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\hash.h
+
+1501373028 source:c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.c
+	<stdio.h>
+	<stdbool.h>
+	"file.utils.h"
+
+1501371443 c:\users\dougl\documents\git\ord.hashextensivel\hash.extensivel\file.utils.h
+	<stdbool.h>
 
