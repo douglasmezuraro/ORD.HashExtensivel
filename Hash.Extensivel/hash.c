@@ -5,17 +5,17 @@ int hash(int key) {
 }
 
 int makeAddress(int key, int depth) {
-    int retValue = 0,
-        mask     = 1,
-        value    = hash(key),
-        lowBit   = 0;
+    int retVal  = 0,
+        mask    = 1,
+        hashVal = hash(key),
+        lowBit  = 0;
 
     for(int i = 1; i <= depth; i++) {
-        retValue = retValue<<1;
-        lowBit   = value&mask;
-        retValue = retValue|lowBit;
-        value    = value>>1;
+        retVal  = retVal<<1;
+        lowBit  = hashVal&mask;
+        retVal  = retVal|lowBit;
+        hashVal = hashVal>>1;
     }
 
-    return retValue;
+    return retVal;
 }

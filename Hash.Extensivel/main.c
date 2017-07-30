@@ -24,12 +24,13 @@ void inicialization(int key) {
         dir.deepth = 0;
         dir.count = 0;
     }
-    else
-        dir.deepth = pow(2, dir.count);
+    else dir.deepth = (int)log2(dir.count);
 
-    dir.values = (DirCell)malloc(sizeof(DirCell));
+    int index = makeAddress(key, BUCKET_DEPTH);
+
     DirCell dirCell = (Bucket *)malloc(sizeof(Bucket));
-    dir.values[dir.count] = dirCell;
+    dir.values = (DirCell *)malloc(sizeof(DirCell));
+    dir.values[index] = dirCell;
     dir.count++;
 }
 

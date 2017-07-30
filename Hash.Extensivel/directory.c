@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 bool op_find(int key, Bucket * foundBucket, Directory directory) {
-    int address = makeAddress(key, directory.deepth);
+    int address = makeAddress(key, BUCKET_DEPTH);
     foundBucket = directory.values[address];
 
     for(int i = 0; i < foundBucket->count; i++)
@@ -24,8 +24,10 @@ bool op_add(int key, Directory directory) {
 
 // Buckets
 void bk_add_key(int key, Bucket * bucket, Directory directory) {
-    if(bucket->count < TAM_MAX_BUCKET)
+    if(bucket->count < TAM_MAX_BUCKET) {
         bucket->keys[bucket->count] = key;
+        bucket->count++;
+    }
     else {
         bk_split(bucket, directory);
         op_add(key, directory);
