@@ -1,4 +1,5 @@
 #include "hash.h"
+#include <stdlib.h>
 
 int hash(int key) {
     return key; // TODO: Se necessário fazer a função de espalhamento
@@ -22,13 +23,15 @@ int makeAddress(int key, int depth) {
 }
 
 bool op_find(int key, Bucket * foundBucket, Directory * directory) {
-    int i, address = makeAddress(key, BUCKET_DEPTH);
+    int i, address = makeAddress(key, directory->globalDeepth);
 
     * foundBucket = directory->values[address];
 
-    for(i = 0; i < foundBucket->count; i++)
-        if(foundBucket->keys[i] == key)
-            return true;
+    if(foundBucket != NULL) {
+      for(i = 0; i < foundBucket->count; i++)
+          if(foundBucket->keys[i] == key)
+              return true;
+    }
 
     return false;
 }

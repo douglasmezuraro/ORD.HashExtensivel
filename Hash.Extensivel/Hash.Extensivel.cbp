@@ -32,10 +32,6 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="constants.h" />
-		<Unit filename="directory.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="directory.h" />
 		<Unit filename="file.utils.c">
 			<Option compilerVar="CC" />
 		</Unit>

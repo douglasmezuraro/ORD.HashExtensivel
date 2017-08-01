@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include "bucket.h"
 #include "constants.h"
 #include "hash.h"
 
@@ -30,9 +29,7 @@ void inicialization(int key) {
     int address = makeAddress(key, BUCKET_DEPTH);
 
     dir.values = (DirCell *)malloc(sizeof(DirCell));
-    DirCell * cell = (DirCell *)malloc(sizeof(DirCell));
-    * cell = newBucket();
-    dir.values[address] = * cell;
+    dir.values[address] = newBucket();
     dir.count++;
 }
 
