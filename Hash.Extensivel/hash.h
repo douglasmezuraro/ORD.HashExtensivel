@@ -10,11 +10,9 @@ typedef struct {
     int keys[TAM_MAX_BUCKET];
 } Bucket;
 
-typedef Bucket DirCell;
-
 typedef struct {
-    DirCell * values;
-    int globalDeepth;
+    Bucket * values;
+    int depth;
     int count;
 } Directory;
 

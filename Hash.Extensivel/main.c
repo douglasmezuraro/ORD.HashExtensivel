@@ -12,6 +12,7 @@ void readFile(void) {
 
     while(!feof(file)) {
         int key = getKey(file);
+        dir.count++;
         inicialization(key);
         op_add(key, &dir);
     }
@@ -21,16 +22,16 @@ void readFile(void) {
 
 void inicialization(int key) {
     if(dir.values == NULL) {
-        dir.globalDeepth = 0;
-        dir.count  = 0;
+        dir.depth = 0;
+        dir.values = (Bucket *)malloc(sizeof(Bucket));
     }
-    else dir.globalDeepth = (int)log2(dir.count);
+    else {
+        dir.depth = (int)log2(dir.count);
+        dir.values = (Bucket *)realloc(dir.values, dir.depth * (sizeof(Bucket)));
+    }
 
     int address = makeAddress(key, BUCKET_DEPTH);
-
-    dir.values = (DirCell *)malloc(sizeof(DirCell));
     dir.values[address] = newBucket();
-    dir.count++;
 }
 
 void finalization(void) {

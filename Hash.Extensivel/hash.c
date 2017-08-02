@@ -23,7 +23,7 @@ int makeAddress(int key, int depth) {
 }
 
 bool op_find(int key, Bucket * foundBucket, Directory * directory) {
-    int i, address = makeAddress(key, directory->globalDeepth);
+    int i, address = makeAddress(key, BUCKET_DEPTH);
 
     * foundBucket = directory->values[address];
 
@@ -37,12 +37,12 @@ bool op_find(int key, Bucket * foundBucket, Directory * directory) {
 }
 
 bool op_add(int key, Directory * directory) {
-    Bucket * bucket = (Bucket *)malloc(sizeof(Bucket));
+    Bucket bucket = newBucket();
 
-    if(op_find(key, bucket, directory))
+    if(op_find(key, &bucket, directory))
         return false;
     else {
-        bk_add_key(key, bucket, directory);
+        bk_add_key(key, &bucket, directory);
         return true;
     }
 }
@@ -59,7 +59,7 @@ void bk_add_key(int key, Bucket * bucket, Directory * directory) {
 }
 
 void bk_split(Bucket * bucket, Directory * directory) {
-    if(bucket->depth == directory->globalDeepth) {
+    if(bucket->depth == directory->depth) {
         Bucket newBucket;
         int newStart, newEnd;
 
@@ -82,7 +82,7 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * di
     sharedAddress = makeAddress(oldBucket->keys[0], oldBucket->depth);
     newShared     = sharedAddress<1;
     newShared     = newShared|mask;
-    bitsToFill    = directory->globalDeepth - (oldBucket->depth + 1);
+    bitsToFill    = directory->depth - (oldBucket->depth + 1);
     newStart      = newEnd = newShared;
 
     for(i = 1; i <= bitsToFill; i++) {
