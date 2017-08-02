@@ -98,14 +98,3 @@ void dir_ins_bucket(Bucket * bucket, int start, int end, Directory * directory) 
     for(i = start; i <= end; i++)
         directory->values[i].ref = bucket;
 }
-
-Bucket newBucket(void) {
-    int i;
-    Bucket b;
-
-    b.count = 0;
-    b.depth = 0;
-
-    for(i = 0; i < TAM_MAX_BUCKET; i++)
-        b.keys[i] = 0;
-}
