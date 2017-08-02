@@ -1,8 +1,29 @@
 #include "hash.h"
 #include <stdlib.h>
 
+Directory dir;
+
+void inicialization(void) {
+    dir.count = 0;
+    dir.depth = 0;
+    dir.values = (DirCell *)malloc(sizeof(Bucket));
+
+    // TODO: Criar método que aloca função e inicializa os valores
+    dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
+    dir.values[0].ref->count = 0;
+    dir.values[0].ref->depth = 0;
+
+    int i = 0;
+    for(i; i < TAM_MAX_BUCKET; i++)
+        dir.values[0].ref->keys[i] = 0;
+}
+
+void finalization(void) {
+    // TODO : Implementar
+}
+
 int hash(int key) {
-    return key; // TODO: Se necessário fazer a função de espalhamento
+    return key; // TODO : Se necessário fazer a função de espalhamento
 }
 
 int makeAddress(int key, int depth) {
@@ -22,10 +43,10 @@ int makeAddress(int key, int depth) {
     return retVal;
 }
 
-bool op_find(int key, Bucket ** bucket, Directory * directory) {
-    int address = makeAddress(key, directory->depth);
+bool op_find(int key, Bucket ** bucket) {
+    int address = makeAddress(key, dir.depth);
 
-    (* bucket) = directory->values[address].ref;
+    (* bucket) = dir.values[address].ref;
 
     if(bucket != NULL) {
         int i;
@@ -37,42 +58,42 @@ bool op_find(int key, Bucket ** bucket, Directory * directory) {
     return false;
 }
 
-bool op_add(int key, Directory * directory) {
+bool op_add(int key) {
     Bucket * bucket;
 
-    if(op_find(key, &bucket, directory))
+    if(op_find(key, &bucket))
         return false;
     else {
-      bk_add_key(key, bucket, directory);
+      bk_add_key(key, bucket);
       return true;
     }
 }
 
-void bk_add_key(int key, Bucket * bucket, Directory * directory) {
+void bk_add_key(int key, Bucket * bucket) {
     if(bucket->count < TAM_MAX_BUCKET) {
         bucket->keys[bucket->count] = key;
         bucket->count++;
     }
     else {
-        bk_split(bucket, directory);
-        op_add(key, directory);
+        bk_split(bucket);
+        op_add(key);
     }
 }
 
-void bk_split(Bucket * bucket, Directory * directory) {
-    if(bucket->depth == directory->depth) {
+void bk_split(Bucket * bucket) {
+    if(bucket->depth == dir.depth) {
         Bucket * newBucket;
         int newStart, newEnd;
 
-        find_new_range(bucket, newStart, newEnd, directory);
-        dir_ins_bucket(&newBucket, newStart, newEnd, directory);
+        find_new_range(bucket, newStart, newEnd);
+        dir_ins_bucket(&newBucket, newStart, newEnd);
 
         bucket->depth++;
         newBucket->depth = bucket->depth;
     }
 }
 
-void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * directory) {
+void find_new_range(Bucket * oldBucket, int newStart, int newEnd) {
     int i,
         mask,
         sharedAddress,
@@ -83,7 +104,7 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * di
     sharedAddress = makeAddress(oldBucket->keys[0], oldBucket->depth);
     newShared     = sharedAddress<1;
     newShared     = newShared|mask;
-    bitsToFill    = directory->depth - (oldBucket->depth + 1);
+    bitsToFill    = dir.depth - (oldBucket->depth + 1);
     newStart      = newEnd = newShared;
 
     for(i = 1; i <= bitsToFill; i++) {
@@ -93,8 +114,12 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * di
     }
 }
 
-void dir_ins_bucket(Bucket * bucket, int start, int end, Directory * directory) {
+void dir_ins_bucket(Bucket * bucket, int start, int end) {
     int i;
     for(i = start; i <= end; i++)
-        directory->values[i].ref = bucket;
+        dir.values[i].ref = bucket;
+}
+
+void dir_double(void) {
+
 }

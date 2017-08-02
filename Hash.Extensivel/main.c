@@ -5,37 +5,17 @@
 #include "constants.h"
 #include "hash.h"
 
-Directory dir;
-
 void readFile(void) {
     FILE * file = fopen(FILE_NAME, "r");
 
     inicialization();
+
     while(!feof(file)) {
         int key = getKey(file);
-        op_add(key, &dir);
+        op_add(key);
     }
 
     fclose(file);
-}
-
-void inicialization() {
-    dir.count = 0;
-    dir.depth = 0;
-    dir.values = (DirCell *)malloc(sizeof(Bucket));
-
-    // TODO: Criar método que aloca função e inicializa os valores
-    dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
-    dir.values[0].ref->count = 0;
-    dir.values[0].ref->depth = 0;
-
-    int i = 0;
-    for(i; i < TAM_MAX_BUCKET; i++)
-        dir.values[0].ref->keys[i] = 0;
-}
-
-void finalization(void) {
-
 }
 
 void printHeader(void) {
