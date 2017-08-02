@@ -10,15 +10,17 @@ typedef struct {
     int keys[TAM_MAX_BUCKET];
 } Bucket;
 
-typedef Bucket * pBucket;
+typedef struct {
+    Bucket * ref;
+} DirCell;
 
 typedef struct {
-    pBucket * values;
+    DirCell * values;
     int depth;
     int count;
 } Directory;
 
-bool op_find(int key, Bucket * foundBucket, Directory * directory);
+bool op_find(int key, Bucket ** foundBucket, Directory * directory);
 bool op_add(int key, Directory * directory);
 void bk_add_key(int key, Bucket * bucket, Directory * directory);
 void bk_split(Bucket * bucket, Directory * directory);

@@ -10,32 +10,21 @@ Directory dir;
 void readFile(void) {
     FILE * file = fopen(FILE_NAME, "r");
 
+    inicialization();
     while(!feof(file)) {
         int key = getKey(file);
-        inicialization(key);
         op_add(key, &dir);
     }
 
     fclose(file);
 }
 
-void inicialization(int key) {
-    int address = makeAddress(key, BUCKET_DEPTH);
-    pBucket d = (pBucket)malloc(sizeof(pBucket));
-    *d = newBucket();
-    if(dir.values == NULL) {
-        dir.depth = 0;
-        dir.values = (pBucket)malloc(sizeof(Bucket));
-    }
-    else {
-        dir.depth = (int)log2(dir.count);
-        dir.values = (pBucket)realloc(dir.values, dir.depth * (sizeof(pBucket)));
-    }
-    dir.values[address] = d;
-    dir.count++;
-
-
-   // dir.values[address] = * newBucket();
+void inicialization() {
+    dir.count = 0;
+    dir.depth = 0;
+    dir.values = (DirCell *)malloc(sizeof(Bucket));
+    dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
+    dir.values[0].ref = * newBucket();
 }
 
 void finalization(void) {

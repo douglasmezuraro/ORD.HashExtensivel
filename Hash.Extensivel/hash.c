@@ -22,31 +22,30 @@ int makeAddress(int key, int depth) {
     return retVal;
 }
 
-bool op_find(int key, Bucket * bucket, Directory * directory) {
-    int i, address = makeAddress(key, BUCKET_DEPTH);
-    pBucket pBucket;
-    pBucket = directory->values[address];
-    bucket = (Bucket *) pBucket;
+bool op_find(int key, Bucket ** bucket, Directory * directory) {
+    int address = makeAddress(key, directory->depth);
 
-    if(bucket != NULL)
-        for(i = 0; i < bucket->count; i++)
-            if(bucket->keys[i] == key)
+    (* bucket) = directory->values[address].ref;
+
+    if(bucket != NULL) {
+        int i;
+        for(i = 0; i < (* bucket)->count; i++)
+            if((* bucket)->keys[i] == key)
                 return true;
+    }
 
     return false;
 }
 
-bool op_add(int key, Directory *directory) {
+bool op_add(int key, Directory * directory) {
     Bucket * bucket;
-   //#Bucket * bucket = ()malloc(sizeof(Bucket));
 
-    if(op_find(key, bucket, directory))
+    if(op_find(key, &bucket, directory))
         return false;
-
-    if(bucket != NULL)
-      bk_add_key(key, bucket, directory);
-
-    return true;
+    else {
+      bk_add_key(key, &bucket, directory);
+      return true;
+    }
 }
 
 void bk_add_key(int key, Bucket * bucket, Directory * directory) {
@@ -97,7 +96,7 @@ void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * di
 void dir_ins_bucket(Bucket * bucket, int start, int end, Directory * directory) {
     int i;
     for(i = start; i <= end; i++)
-        directory->values[i] = bucket;
+        directory->values[i].ref = bucket;
 }
 
 Bucket newBucket(void) {
