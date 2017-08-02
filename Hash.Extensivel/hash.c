@@ -43,7 +43,7 @@ bool op_add(int key, Directory * directory) {
     if(op_find(key, &bucket, directory))
         return false;
     else {
-      bk_add_key(key, &bucket, directory);
+      bk_add_key(key, bucket, directory);
       return true;
     }
 }
@@ -61,14 +61,14 @@ void bk_add_key(int key, Bucket * bucket, Directory * directory) {
 
 void bk_split(Bucket * bucket, Directory * directory) {
     if(bucket->depth == directory->depth) {
-        Bucket newBucket;
+        Bucket * newBucket;
         int newStart, newEnd;
 
         find_new_range(bucket, newStart, newEnd, directory);
         dir_ins_bucket(&newBucket, newStart, newEnd, directory);
 
         bucket->depth++;
-        newBucket.depth = bucket->depth;
+        newBucket->depth = bucket->depth;
     }
 }
 

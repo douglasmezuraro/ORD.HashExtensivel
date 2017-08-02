@@ -23,8 +23,15 @@ void inicialization() {
     dir.count = 0;
     dir.depth = 0;
     dir.values = (DirCell *)malloc(sizeof(Bucket));
+
+    // TODO: Criar método que aloca função e inicializa os valores
     dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
-    dir.values[0].ref = * newBucket();
+    dir.values[0].ref->count = 0;
+    dir.values[0].ref->depth = 0;
+
+    int i = 0;
+    for(i; i < TAM_MAX_BUCKET; i++)
+        dir.values[0].ref->keys[i] = 0;
 }
 
 void finalization(void) {
