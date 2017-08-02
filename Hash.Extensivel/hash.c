@@ -81,16 +81,19 @@ void bk_add_key(int key, Bucket * bucket) {
 }
 
 void bk_split(Bucket * bucket) {
-    if(bucket->depth == dir.depth) {
-        Bucket * newBucket;
-        int newStart, newEnd;
+    if(bucket->depth == dir.depth) // ta cheio, precisa aumentar o diretorio
+        dir_double(); // método que dobra o tamanho do diretorio
 
-        find_new_range(bucket, newStart, newEnd);
-        dir_ins_bucket(&newBucket, newStart, newEnd);
+    Bucket * newBucket = (Bucket *)malloc(sizeof(Bucket));
 
-        bucket->depth++;
-        newBucket->depth = bucket->depth;
-    }
+    int newStart, newEnd;
+
+    find_new_range(bucket, newStart, newEnd);
+    dir_ins_bucket(&newBucket, newStart, newEnd);
+
+    bucket->depth++;
+    newBucket->depth = bucket->depth;
+
 }
 
 void find_new_range(Bucket * oldBucket, int newStart, int newEnd) {
@@ -121,5 +124,22 @@ void dir_ins_bucket(Bucket * bucket, int start, int end) {
 }
 
 void dir_double(void) {
+    int currentSize = pow(2, dir.depth); // fórmula vista na pag. 24 da aula 11.1
+    int newSize = currentSize * 2; // dobro do tamanho antigo
 
+    Directory temp;
+
+    temp.values = (DirCell *)malloc(newSize * sizeof(DirCell));
+
+    int i;
+    for(i = 0; i < currentSize - 1; i++) {
+        temp.values[2 * i].ref = dir.values[i].ref;
+        temp.values[2 * i + 1].ref = dir.values[i].ref;
+    }
+
+    free(dir.values);
+
+    dir.values = temp.values;
+
+    dir.depth++;
 }
