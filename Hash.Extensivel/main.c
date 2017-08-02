@@ -12,7 +12,6 @@ void readFile(void) {
 
     while(!feof(file)) {
         int key = getKey(file);
-        dir.count++;
         inicialization(key);
         op_add(key, &dir);
     }
@@ -21,17 +20,22 @@ void readFile(void) {
 }
 
 void inicialization(int key) {
+    int address = makeAddress(key, BUCKET_DEPTH);
+    pBucket d = (pBucket)malloc(sizeof(pBucket));
+    *d = newBucket();
     if(dir.values == NULL) {
         dir.depth = 0;
-        dir.values = (Bucket *)malloc(sizeof(Bucket));
+        dir.values = (pBucket)malloc(sizeof(Bucket));
     }
     else {
         dir.depth = (int)log2(dir.count);
-        dir.values = (Bucket *)realloc(dir.values, dir.depth * (sizeof(Bucket)));
+        dir.values = (pBucket)realloc(dir.values, dir.depth * (sizeof(pBucket)));
     }
+    dir.values[address] = d;
+    dir.count++;
 
-    int address = makeAddress(key, BUCKET_DEPTH);
-    dir.values[address] = newBucket();
+
+   // dir.values[address] = * newBucket();
 }
 
 void finalization(void) {
@@ -41,7 +45,7 @@ void finalization(void) {
 void printHeader(void) {
     puts("************************************************* ");
     puts("* Projeto    : Hash Extensivel                    ");
-    puts("* Data       : 01/08/2017                         ");
+    puts("* Data       : 03/08/2017                         ");
     puts("* Autores    : Douglas Mezuraro RA95676           ");
     puts("*              Gustavo Leite Scalabrini RA89869   ");
     puts("* Disciplina : Organizacao e Recuperacao de Dados ");

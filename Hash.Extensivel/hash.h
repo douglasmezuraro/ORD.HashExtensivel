@@ -10,8 +10,10 @@ typedef struct {
     int keys[TAM_MAX_BUCKET];
 } Bucket;
 
+typedef Bucket * pBucket;
+
 typedef struct {
-    Bucket * values;
+    pBucket * values;
     int depth;
     int count;
 } Directory;
@@ -22,6 +24,7 @@ void bk_add_key(int key, Bucket * bucket, Directory * directory);
 void bk_split(Bucket * bucket, Directory * directory);
 void find_new_range(Bucket * oldBucket, int newStart, int newEnd, Directory * directory);
 void dir_ins_bucket(Bucket * bucket, int start, int end, Directory * directory);
+void dir_double();
 Bucket newBucket(void);
 int hash(int key);
 int makeAddress(int key, int depth);
