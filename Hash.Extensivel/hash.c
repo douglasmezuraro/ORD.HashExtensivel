@@ -27,17 +27,17 @@ int hash(int key) {
 }
 
 int makeAddress(int key, int depth) {
-    int i,
-        retVal  = 0,
+    int retVal  = 0,
         mask    = 1,
         hashVal = hash(key),
         lowBit  = 0;
 
+    int i;
     for(i = 1; i <= depth; i++) {
-        retVal  = retVal<<1;
-        lowBit  = hashVal&mask;
-        retVal  = retVal|lowBit;
-        hashVal = hashVal>>1;
+        retVal  = retVal << 1;
+        lowBit  = hashVal & mask;
+        retVal  = retVal | lowBit;
+        hashVal = hashVal >> 1;
     }
 
     return retVal;
@@ -88,32 +88,37 @@ void bk_split(Bucket * bucket) {
 
     int newStart, newEnd;
 
-    find_new_range(bucket, newStart, newEnd);
+    find_new_range(bucket, &newStart, &newEnd);
     dir_ins_bucket(&newBucket, newStart, newEnd);
 
     bucket->depth++;
     newBucket->depth = bucket->depth;
 
+    // TODO : Redistribuir as chaves, how???
 }
 
-void find_new_range(Bucket * oldBucket, int newStart, int newEnd) {
-    int i,
-        mask,
+void find_new_range(Bucket * old, int * newStart, int * newEnd) {
+
+    // NOTA: os parâmetros "newStart" e "newEnd" são parâmetros de saída,
+    // por isso precisam ser ponteitos
+
+    int mask,
         sharedAddress,
         newShared,
         bitsToFill;
 
     mask          = 1;
-    sharedAddress = makeAddress(oldBucket->keys[0], oldBucket->depth);
-    newShared     = sharedAddress<1;
-    newShared     = newShared|mask;
-    bitsToFill    = dir.depth - (oldBucket->depth + 1);
+    sharedAddress = makeAddress(old->keys[0], old->depth);
+    newShared     = sharedAddress < 1;
+    newShared     = newShared | mask;
+    bitsToFill    = dir.depth - (old->depth + 1);
     newStart      = newEnd = newShared;
 
+    int i;
     for(i = 1; i <= bitsToFill; i++) {
-        newStart = newStart<1;
-        newEnd   = newEnd<1;
-        newEnd   = newEnd|mask;
+        * newStart = (* newStart) < 1;
+        * newEnd   = (* newEnd) < 1;
+        * newEnd   = (* newEnd) | mask;
     }
 }
 

@@ -31,7 +31,7 @@ bool op_find(int key, Bucket ** foundBucket);
 bool op_add(int key);
 void bk_add_key(int key, Bucket * bucket);
 void bk_split(Bucket * bucket);
-void find_new_range(Bucket * oldBucket, int newStart, int newEnd);
+void find_new_range(Bucket * old, int * newStart, int * newEnd);
 void dir_ins_bucket(Bucket * bucket, int start, int end);
 void dir_double(void);
 
