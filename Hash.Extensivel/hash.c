@@ -46,9 +46,9 @@ int makeAddress(int key, int depth) {
 bool op_find(int key, Bucket ** bucket) {
     int address = makeAddress(key, dir.depth);
 
-    (* bucket) = dir.values[address].ref;
+    * bucket = dir.values[address].ref;
 
-    if(bucket != NULL) {
+    if(* bucket != NULL) {
         int i;
         for(i = 0; i < (* bucket)->count; i++)
             if((* bucket)->keys[i] == key)
@@ -59,14 +59,13 @@ bool op_find(int key, Bucket ** bucket) {
 }
 
 bool op_add(int key) {
-    Bucket * bucket;
+    Bucket * bucket = NULL;
 
     if(op_find(key, &bucket))
         return false;
-    else {
-      bk_add_key(key, bucket);
-      return true;
-    }
+
+    bk_add_key(key, bucket);
+    return true;
 }
 
 void bk_add_key(int key, Bucket * bucket) {
@@ -84,17 +83,37 @@ void bk_split(Bucket * bucket) {
     if(bucket->depth == dir.depth) // ta cheio, precisa aumentar o diretorio
         dir_double(); // método que dobra o tamanho do diretorio
 
-    Bucket * newBucket = (Bucket *)malloc(sizeof(Bucket));
+    Bucket * newBucket;
+    newBucket = (Bucket *)malloc(sizeof(Bucket));
+    newBucket->count = 0;
 
-    int newStart, newEnd;
+    int newStart = 0,
+          newEnd = 0;
 
     find_new_range(bucket, &newStart, &newEnd);
-    dir_ins_bucket(&newBucket, newStart, newEnd);
+    dir_ins_bucket(newBucket, newStart, newEnd);
 
     bucket->depth++;
+
     newBucket->depth = bucket->depth;
 
-    // TODO : Redistribuir as chaves, how???
+    int buffer[TAM_MAX_BUCKET];
+    int i, address;
+
+    for(i = 0; i < TAM_MAX_BUCKET; i++){
+        buffer[i] = bucket->keys[i];
+        bucket->keys[i] = 0;
+        bucket->count--;
+    }
+
+    for(i = 0; i < TAM_MAX_BUCKET; i++){
+        address = makeAddress(buffer[i], dir.depth);
+
+        if((address >= newStart) && (address <= newEnd))
+            bk_add_key(buffer[i], newBucket);
+        else
+            bk_add_key(buffer[i], bucket);
+    }
 }
 
 void find_new_range(Bucket * old, int * newStart, int * newEnd) {
@@ -108,14 +127,14 @@ void find_new_range(Bucket * old, int * newStart, int * newEnd) {
         bitsToFill;
 
     mask          = 1;
-    sharedAddress = makeAddress(old->keys[0], old->depth);
+    sharedAddress = makeAddress(old->keys[1], old->depth);
     newShared     = sharedAddress << 1;
     newShared     = newShared | mask;
     bitsToFill    = dir.depth - (old->depth + 1);
-    * newStart    = * newEnd = newShared;
+    * newStart    = (* newEnd) = newShared;
 
     int i;
-    for(i = 1; i <= bitsToFill; i++) {
+    for(i = 0; i < bitsToFill; i++) {
         * newStart = (* newStart) << 1;
         * newEnd   = (* newEnd) << 1;
         * newEnd   = (* newEnd) | mask;
