@@ -109,15 +109,15 @@ void find_new_range(Bucket * old, int * newStart, int * newEnd) {
 
     mask          = 1;
     sharedAddress = makeAddress(old->keys[0], old->depth);
-    newShared     = sharedAddress < 1;
+    newShared     = sharedAddress << 1;
     newShared     = newShared | mask;
     bitsToFill    = dir.depth - (old->depth + 1);
-    newStart      = newEnd = newShared;
+    * newStart    = * newEnd = newShared;
 
     int i;
     for(i = 1; i <= bitsToFill; i++) {
-        * newStart = (* newStart) < 1;
-        * newEnd   = (* newEnd) < 1;
+        * newStart = (* newStart) << 1;
+        * newEnd   = (* newEnd) << 1;
         * newEnd   = (* newEnd) | mask;
     }
 }
