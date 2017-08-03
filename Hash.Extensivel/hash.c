@@ -2,8 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-Directory dir;    // Diretório global
-unsigned last_id; // Gerador de ids global
+Directory dir;        // Diretório global
+unsigned last_id;     // Gerador de ids global
 
 void dir_initialize(void) {
     // Inicializa o gerador de ids
@@ -27,22 +27,8 @@ void dir_initialize(void) {
 }
 
 void dir_finalize(void) {
-    puts("");
-
-    int currentSize = dir_get_current_size();
-    int i;
-
-    // Printa o diretorio e os buckets de cada posição
-    for(i = 0; i < currentSize; i++)
-          printf("dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
-
-    puts("");
-
-    printf("Directory current size = %i\n", currentSize);
-    printf("Number of buckets = %i\n", last_id);
-
-    for(i = 0; i < currentSize; i++)
-        printBucket(dir.values[i].ref);
+    printDirectory();
+    printBuckets();
 }
 
 int hash(int key) {
@@ -208,11 +194,26 @@ int dir_get_current_size(void) {
     return pow(2, dir.depth);
 }
 
-void printBucket(Bucket * bucket) {
-    puts("");
-    printf("== Bucket %i ==\n", bucket->id);
-    printf("#depth = %i    \n", bucket->depth);
-    printf("key[0] = %i    \n", bucket->keys[0]);
-    printf("key[1] = %i    \n", bucket->keys[1]);
+void printBuckets(void) {
+    int currentSize = dir_get_current_size();
+    int array[currentSize];
+    int i;
+
+    for(i = 0; i < currentSize; i++) {
+        printf("\n== Bucket %i ==\n", dir.values[i].ref->id);
+        printf("#depth = %i    \n", dir.values[i].ref->depth);
+        printf("key[0] = %i    \n", dir.values[i].ref->keys[0]);
+        printf("key[1] = %i    \n", dir.values[i].ref->keys[1]);
+    }
 }
 
+void printDirectory(void) {
+    int currentSize = dir_get_current_size();
+
+    int i;
+    for(i = 0; i < currentSize; i++)
+        printf("dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
+
+    printf("\nDirectory current size = %i", currentSize);
+    printf("\nNumber of buckets = %i\n", last_id);
+}

@@ -38,6 +38,8 @@ bool op_add(int key);
 void find_new_range(Bucket * old, int * newStart, int * newEnd);
 int dir_get_current_size(void);
 unsigned int gen_id(void);
-void printBucket(Bucket * bucket);
+// Uteis para printar
+void printDirectory(void);
+void printBuckets(void);
 
 #endif
