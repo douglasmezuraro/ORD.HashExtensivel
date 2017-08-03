@@ -196,14 +196,20 @@ int dir_get_current_size(void) {
 
 void printBuckets(void) {
     int currentSize = dir_get_current_size();
-    int array[currentSize];
-    int i;
 
+    int * array = (int *)malloc(currentSize * sizeof(int));
+    initializeArray(array, currentSize);
+
+    int i;
     for(i = 0; i < currentSize; i++) {
-        printf("\n== Bucket %i ==\n", dir.values[i].ref->id);
-        printf("#depth = %i    \n", dir.values[i].ref->depth);
-        printf("key[0] = %i    \n", dir.values[i].ref->keys[0]);
-        printf("key[1] = %i    \n", dir.values[i].ref->keys[1]);
+        if(!isPrinted(dir.values[i].ref->id, array, currentSize)) {
+            printf("\n== Bucket %i ==\n", dir.values[i].ref->id);
+            printf("#depth = %i\n", dir.values[i].ref->depth);
+            printf("key[0] = %i\n", dir.values[i].ref->keys[0]);
+            printf("key[1] = %i\n", dir.values[i].ref->keys[1]);
+
+            array[i] = dir.values[i].ref->id;
+        }
     }
 }
 
@@ -216,4 +222,20 @@ void printDirectory(void) {
 
     printf("\nDirectory current size = %i", currentSize);
     printf("\nNumber of buckets = %i\n", last_id);
+}
+
+void initializeArray(int * array, int size) {
+    int i;
+    for(i = 0; i < size; i++)
+        array[i] = -1;
+}
+
+bool isPrinted(int id, int * array, int max) {
+    int i;
+
+    for(i = 0; i < max; i++)
+        if(array[i] == id)
+            return true;
+
+    return false;
 }

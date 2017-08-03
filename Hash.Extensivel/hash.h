@@ -41,5 +41,8 @@ unsigned int gen_id(void);
 // Uteis para printar
 void printDirectory(void);
 void printBuckets(void);
+void initializeArray(int * array, int size);
+bool isPrinted(int id, int * array, int max);
+
 
 #endif
