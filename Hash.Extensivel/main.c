@@ -14,6 +14,8 @@ void readFile(void) {
         op_add(key);
     }
 
+    dir_finalize();
+
     fclose(file);
 }
 

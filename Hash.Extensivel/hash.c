@@ -10,7 +10,6 @@ void dir_initialize(void) {
     last_id = 0;
 
     // Inicializa o diretório
-    dir.count = 0;
     dir.depth = 0;
     dir.values = (DirCell *)malloc(sizeof(Bucket));
 
@@ -28,7 +27,22 @@ void dir_initialize(void) {
 }
 
 void dir_finalize(void) {
-    // TODO : Implementar
+    puts("");
+
+    int currentSize = dir_get_current_size();
+    int i;
+
+    // Printa o diretorio e os buckets de cada posição
+    for(i = 0; i < currentSize; i++)
+          printf("dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
+
+    puts("");
+
+    printf("Directory current size = %i\n", currentSize);
+    printf("Number of buckets = %i\n", last_id);
+
+    for(i = 0; i < currentSize; i++)
+        printBucket(dir.values[i].ref);
 }
 
 int hash(int key) {
@@ -139,7 +153,7 @@ void dir_ins_bucket(Bucket * bucket, int start, int end) {
 
 void dir_double(void) {
     // pega o tamanho atual do diretorio igual na pagina 24 da aula 11.1
-    int currentSize = pow(2, dir.depth);
+    int currentSize = dir_get_current_size();
     // dobra o tamanho do diretorio atual
     int newSize = 2 * currentSize;
 
@@ -185,7 +199,20 @@ void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart,
 }
 
 unsigned int gen_id(void) {
+    unsigned int result = last_id;
     last_id++;
-    return last_id;
+    return result;
+}
+
+int dir_get_current_size(void) {
+    return pow(2, dir.depth);
+}
+
+void printBucket(Bucket * bucket) {
+    puts("");
+    printf("== Bucket %i ==\n", bucket->id);
+    printf("#depth = %i    \n", bucket->depth);
+    printf("key[0] = %i    \n", bucket->keys[0]);
+    printf("key[1] = %i    \n", bucket->keys[1]);
 }
 

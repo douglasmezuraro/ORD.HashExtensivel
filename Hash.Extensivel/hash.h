@@ -18,7 +18,6 @@ typedef struct {
 typedef struct {
     DirCell * values;
     unsigned int depth;
-    unsigned int count;
 } Directory;
 
 // Hash
@@ -37,6 +36,8 @@ void bk_split(Bucket * bucket);
 bool op_find(int key, Bucket ** foundBucket);
 bool op_add(int key);
 void find_new_range(Bucket * old, int * newStart, int * newEnd);
+int dir_get_current_size(void);
 unsigned int gen_id(void);
+void printBucket(Bucket * bucket);
 
 #endif
