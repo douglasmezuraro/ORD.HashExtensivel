@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 Directory dir;        // Diretório global
-unsigned last_id;     // Gerador de ids global
+unsigned int last_id; // Gerador de ids global
 
 void dir_initialize(void) {
     // Inicializa o gerador de ids
@@ -27,8 +27,12 @@ void dir_initialize(void) {
 }
 
 void dir_finalize(void) {
-    printDirectory();
-    printBuckets();
+    FILE * file = fopen("output.txt", "w");
+
+    printDirectory(true, file);
+    printBuckets(true, file);
+
+    fclose(file);
 }
 
 int hash(int key) {
@@ -164,23 +168,23 @@ void dir_double(void) {
 }
 
 void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart, int newEnd) {
-    int keys[TAM_MAX_BUCKET];
+    int array[TAM_MAX_BUCKET];
     int i;
 
     for(i = 0; i < TAM_MAX_BUCKET; i++){
-        keys[i] = oldBucket->keys[i];
+        array[i] = oldBucket->keys[i];
         oldBucket->keys[i] = 0;
     }
 
     oldBucket->count = 0;
 
     for(i = 0; i < TAM_MAX_BUCKET; i++){
-        int address = make_address(keys[i], dir.depth);
+        int address = make_address(array[i], dir.depth);
 
         if((address >= newStart) && (address <= newEnd))
-            bk_add_key(keys[i], newBucket);
+            bk_add_key(array[i], newBucket);
         else
-            bk_add_key(keys[i], oldBucket);
+            bk_add_key(array[i], oldBucket);
     }
 }
 
@@ -194,7 +198,7 @@ int dir_get_current_size(void) {
     return pow(2, dir.depth);
 }
 
-void printBuckets(void) {
+void printBuckets(bool writeInFile, FILE * file) {
     int currentSize = dir_get_current_size();
 
     int * array = (int *)malloc(currentSize * sizeof(int));
@@ -203,25 +207,43 @@ void printBuckets(void) {
     int i;
     for(i = 0; i < currentSize; i++) {
         if(!isPrinted(dir.values[i].ref->id, array, currentSize)) {
-            printf("\n== Bucket %i ==\n", dir.values[i].ref->id);
-            printf("#depth = %i\n", dir.values[i].ref->depth);
-            printf("key[0] = %i\n", dir.values[i].ref->keys[0]);
-            printf("key[1] = %i\n", dir.values[i].ref->keys[1]);
+            if(writeInFile) {
+                fprintf(file, "\n== Bucket %i ==\n", dir.values[i].ref->id);
+                fprintf(file, "#depth = %i\n", dir.values[i].ref->depth);
+                fprintf(file, "key[0] = %i\n", dir.values[i].ref->keys[0]);
+                fprintf(file, "key[1] = %i\n", dir.values[i].ref->keys[1]);
+            }
+            else {
+                printf("\n== Bucket %i ==\n", dir.values[i].ref->id);
+                printf("#depth = %i\n", dir.values[i].ref->depth);
+                printf("key[0] = %i\n", dir.values[i].ref->keys[0]);
+                printf("key[1] = %i\n", dir.values[i].ref->keys[1]);
+            }
 
             array[i] = dir.values[i].ref->id;
         }
     }
 }
 
-void printDirectory(void) {
+void printDirectory(bool writeInFile, FILE * file) {
     int currentSize = dir_get_current_size();
 
     int i;
-    for(i = 0; i < currentSize; i++)
-        printf("dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
+    for(i = 0; i < currentSize; i++) {
+        if(writeInFile)
+            fprintf(file, "dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
+        else
+            printf("dir[%i] = bucket #%i\n", i, dir.values[i].ref->id);
+    }
 
-    printf("\nDirectory current size = %i", currentSize);
-    printf("\nNumber of buckets = %i\n", last_id);
+    if(writeInFile) {
+        fprintf(file, "\nDirectory current size = %i", currentSize);
+        fprintf(file, "\nNumber of buckets = %i\n", last_id);
+    }
+    else {
+        printf("\nDirectory current size = %i", currentSize);
+        printf("\nNumber of buckets = %i\n", last_id);
+    }
 }
 
 void initializeArray(int * array, int size) {

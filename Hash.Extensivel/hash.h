@@ -2,6 +2,7 @@
 #define _HASH
 
 #include <stdbool.h>
+#include <stdio.h>
 #include "constants.h"
 
 typedef struct {
@@ -39,9 +40,8 @@ void find_new_range(Bucket * old, int * newStart, int * newEnd);
 int dir_get_current_size(void);
 unsigned int gen_id(void);
 // Uteis para printar
-void printDirectory(void);
-void printBuckets(void);
+void printDirectory(bool writeInFile, FILE * file);
+void printBuckets(bool writeInFile, FILE * file);
 void initializeArray(int * array, int size);
 bool isPrinted(int id, int * array, int max);
-
 #endif
