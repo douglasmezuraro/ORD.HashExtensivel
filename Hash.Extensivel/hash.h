@@ -5,9 +5,10 @@
 #include "constants.h"
 
 typedef struct {
-    int depth;
-    int count;
-    int keys[TAM_MAX_BUCKET];
+    unsigned int id;
+    unsigned int depth;
+    unsigned int count;
+    unsigned keys[TAM_MAX_BUCKET];
 } Bucket;
 
 typedef struct {
@@ -16,24 +17,26 @@ typedef struct {
 
 typedef struct {
     DirCell * values;
-    int depth;
-    int count;
+    unsigned int depth;
+    unsigned int count;
 } Directory;
 
 // Hash
 int hash(int key);
 int makeAddress(int key, int depth);
 // Diretório
-void inicialization(void);
-void finalization(void);
-// Buckets
-bool op_find(int key, Bucket ** foundBucket);
-bool op_add(int key);
-void bk_add_key(int key, Bucket * bucket);
-void bk_split(Bucket * bucket);
-void find_new_range(Bucket * old, int * newStart, int * newEnd);
+void dir_initialize(void);
+void dir_finalize(void);
 void dir_ins_bucket(Bucket * bucket, int start, int end);
 void dir_double(void);
 void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart, int newEnd);
+// Buckets
+void bk_add_key(int key, Bucket * bucket);
+void bk_split(Bucket * bucket);
+// Uteis
+bool op_find(int key, Bucket ** foundBucket);
+bool op_add(int key);
+void find_new_range(Bucket * old, int * newStart, int * newEnd);
+unsigned int gen_id(void);
 
 #endif

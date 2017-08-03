@@ -4,8 +4,11 @@
 
 // Diretório global
 Directory dir;
+unsigned last_id;
 
 void dir_initialize(void) {
+    last_id = 0;
+
     dir.count = 0;
     dir.depth = 0;
     dir.values = (DirCell *)malloc(sizeof(Bucket));
@@ -14,6 +17,7 @@ void dir_initialize(void) {
     dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
     dir.values[0].ref->count = 0;
     dir.values[0].ref->depth = 0;
+    dir.values[0].ref->id = gen_id();
 
     int i = 0;
     for(i; i < TAM_MAX_BUCKET; i++)
@@ -87,6 +91,7 @@ void bk_split(Bucket * bucket) {
 
     Bucket * newBucket = (Bucket *)malloc(sizeof(Bucket));
     newBucket->count = 0;
+    newBucket->id = gen_id();
 
     int newStart = 0, newEnd = 0;
 
@@ -175,3 +180,9 @@ void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart,
             bk_add_key(keys[i], oldBucket);
     }
 }
+
+unsigned int gen_id(void) {
+    last_id++;
+    return last_id;
+}
+
