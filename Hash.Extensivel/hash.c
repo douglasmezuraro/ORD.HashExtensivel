@@ -2,26 +2,29 @@
 #include <math.h>
 #include <stdlib.h>
 
-// Diretório global
-Directory dir;
-unsigned last_id;
+Directory dir;    // Diretório global
+unsigned last_id; // Gerador de ids global
 
 void dir_initialize(void) {
+    // Inicializa o gerador de ids
     last_id = 0;
 
+    // Inicializa o diretório
     dir.count = 0;
     dir.depth = 0;
     dir.values = (DirCell *)malloc(sizeof(Bucket));
 
+    // Inicializa o primeiro bucket
     // TODO: Criar método que aloca função e inicializa os valores
-    dir.values[0].ref = (Bucket *)malloc(sizeof(Bucket));
-    dir.values[0].ref->count = 0;
-    dir.values[0].ref->depth = 0;
-    dir.values[0].ref->id = gen_id();
+    dir.values[last_id].ref        = (Bucket *)malloc(sizeof(Bucket));
+    dir.values[last_id].ref->count = 0;
+    dir.values[last_id].ref->depth = 0;
+    dir.values[last_id].ref->id    = gen_id();
 
+    // Inicializa as chaves do primeiro bucket
     int i = 0;
     for(i; i < TAM_MAX_BUCKET; i++)
-        dir.values[0].ref->keys[i] = 0;
+        dir.values[last_id - 1].ref->keys[i] = 0;
 }
 
 void dir_finalize(void) {
