@@ -44,5 +44,4 @@ void printBuckets(void);
 void initializeArray(int * array, int size);
 bool isPrinted(int id, int * array, int max);
 
-
 #endif
