@@ -148,22 +148,27 @@ void dir_ins_bucket(Bucket * bucket, int start, int end) {
 }
 
 void dir_double(void) {
-    int currentSize = pow(2, dir.depth); // fórmula vista na pag. 24 da aula 11.1
-    int newSize = currentSize * 2; // dobro do tamanho antigo
+    // pega o tamanho atual do diretorio igual na pagina 24 da aula 11.1
+    int currentSize = pow(2, dir.depth);
+    // dobra o tamanho do diretorio atual
+    int newSize = 2 * currentSize;
 
     Directory temp;
 
     temp.values = (DirCell *)malloc(newSize * sizeof(DirCell));
 
     int i;
-    for(i = 0; i < currentSize - 1; i++) {
+    for(i = 0; i <= currentSize - 1; i++) {
         temp.values[2 * i].ref = dir.values[i].ref;
         temp.values[2 * i + 1].ref = dir.values[i].ref;
     }
 
+    // libera os values do diretório
     free(dir.values);
 
+    // atribui do diretório temp ao diretório
     dir.values = temp.values;
 
+    // aumenta a profundidade
     dir.depth++;
 }

@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "file.utils.h"
+#include "constants.h"
 
-bool endOfFile(FILE * file) {
+bool isEOF(FILE * file) {
     char aux;
     if((aux = fgetc(file)) == EOF)
         return true;
@@ -12,20 +14,22 @@ bool endOfFile(FILE * file) {
     }
 }
 
-int getKey(FILE * file) {
-    char text[100] = "";
-    char aux;
-    int i = 0;
+int getKeyFromFile(FILE * file) {
+    char buffer[KEY_LENGTH] = EMPTY_STRING;
 
-    if(!endOfFile(file)) {
+    if(!isEOF(file)) {
+        char aux;
+        int i = 0;
         do {
-            text[i] = fgetc(file);
-            aux = text[i];
+            buffer[i] = fgetc(file);
+            aux = buffer[i];
             i++;
-        } while((aux != '\n') && (aux != EOF));
+        } while((aux != LINE_BREAK_CHAR) && (aux != EOF));
     }
 
-    text[i] = '\0';
+    // finaliza a string para evitar lixo no final
+    buffer[strlen(buffer)] = END_OF_STRING;
 
-    return atoi(text);
+    // converte a string para int
+    return atoi(buffer);
 }
