@@ -1,4 +1,5 @@
 #include "hash.h"
+#include <math.h>
 #include <stdlib.h>
 
 Directory dir;
@@ -83,37 +84,18 @@ void bk_split(Bucket * bucket) {
     if(bucket->depth == dir.depth) // ta cheio, precisa aumentar o diretorio
         dir_double(); // método que dobra o tamanho do diretorio
 
-    Bucket * newBucket;
-    newBucket = (Bucket *)malloc(sizeof(Bucket));
+    Bucket * newBucket = (Bucket *)malloc(sizeof(Bucket));
     newBucket->count = 0;
 
-    int newStart = 0,
-          newEnd = 0;
+    int newStart = 0, newEnd = 0;
 
     find_new_range(bucket, &newStart, &newEnd);
     dir_ins_bucket(newBucket, newStart, newEnd);
 
     bucket->depth++;
-
     newBucket->depth = bucket->depth;
 
-    int buffer[TAM_MAX_BUCKET];
-    int i, address;
-
-    for(i = 0; i < TAM_MAX_BUCKET; i++){
-        buffer[i] = bucket->keys[i];
-        bucket->keys[i] = 0;
-        bucket->count--;
-    }
-
-    for(i = 0; i < TAM_MAX_BUCKET; i++){
-        address = makeAddress(buffer[i], dir.depth);
-
-        if((address >= newStart) && (address <= newEnd))
-            bk_add_key(buffer[i], newBucket);
-        else
-            bk_add_key(buffer[i], bucket);
-    }
+    dir_redistribute_keys(bucket, newBucket, newStart, newEnd);
 }
 
 void find_new_range(Bucket * old, int * newStart, int * newEnd) {
@@ -121,12 +103,11 @@ void find_new_range(Bucket * old, int * newStart, int * newEnd) {
     // NOTA: os parâmetros "newStart" e "newEnd" são parâmetros de saída,
     // por isso precisam ser ponteitos
 
-    int mask,
-        sharedAddress,
-        newShared,
-        bitsToFill;
+    int mask          = 1,
+        sharedAddress = 0,
+        newShared     = 0,
+        bitsToFill    = 0;
 
-    mask          = 1;
     sharedAddress = makeAddress(old->keys[1], old->depth);
     newShared     = sharedAddress << 1;
     newShared     = newShared | mask;
@@ -171,4 +152,24 @@ void dir_double(void) {
 
     // aumenta a profundidade
     dir.depth++;
+}
+
+void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart, int newEnd) {
+    int keys[TAM_MAX_BUCKET];
+    int i;
+
+    for(i = 0; i < TAM_MAX_BUCKET; i++){
+        keys[i] = oldBucket->keys[i];
+        oldBucket->keys[i] = 0;
+        oldBucket->count--;
+    }
+
+    for(i = 0; i < TAM_MAX_BUCKET; i++){
+        int address = makeAddress(keys[i], dir.depth);
+
+        if((address >= newStart) && (address <= newEnd))
+            bk_add_key(keys[i], newBucket);
+        else
+            bk_add_key(keys[i], oldBucket);
+    }
 }

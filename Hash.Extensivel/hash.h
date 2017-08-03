@@ -34,5 +34,6 @@ void bk_split(Bucket * bucket);
 void find_new_range(Bucket * old, int * newStart, int * newEnd);
 void dir_ins_bucket(Bucket * bucket, int start, int end);
 void dir_double(void);
+void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart, int newEnd);
 
 #endif
