@@ -7,7 +7,7 @@
 void readFile(void) {
     FILE * file = fopen(FILE_NAME, "r");
 
-    inicialization();
+    dir_initialize();
 
     while(!isEOF(file)) {
         int key = getKeyFromFile(file);

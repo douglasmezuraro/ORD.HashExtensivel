@@ -2,9 +2,10 @@
 #include <math.h>
 #include <stdlib.h>
 
+// Diretório global
 Directory dir;
 
-void inicialization(void) {
+void dir_initialize(void) {
     dir.count = 0;
     dir.depth = 0;
     dir.values = (DirCell *)malloc(sizeof(Bucket));
@@ -19,7 +20,7 @@ void inicialization(void) {
         dir.values[0].ref->keys[i] = 0;
 }
 
-void finalization(void) {
+void dir_finalize(void) {
     // TODO : Implementar
 }
 
@@ -27,7 +28,7 @@ int hash(int key) {
     return key; // TODO : Se necessário fazer a função de espalhamento
 }
 
-int makeAddress(int key, int depth) {
+int make_address(int key, int depth) {
     int retVal  = 0,
         mask    = 1,
         hashVal = hash(key),
@@ -45,7 +46,7 @@ int makeAddress(int key, int depth) {
 }
 
 bool op_find(int key, Bucket ** bucket) {
-    int address = makeAddress(key, dir.depth);
+    int address = make_address(key, dir.depth);
 
     * bucket = dir.values[address].ref;
 
@@ -108,7 +109,7 @@ void find_new_range(Bucket * old, int * newStart, int * newEnd) {
         newShared     = 0,
         bitsToFill    = 0;
 
-    sharedAddress = makeAddress(old->keys[1], old->depth);
+    sharedAddress = make_address(old->keys[1], old->depth);
     newShared     = sharedAddress << 1;
     newShared     = newShared | mask;
     bitsToFill    = dir.depth - (old->depth + 1);
@@ -161,11 +162,12 @@ void dir_redistribute_keys(Bucket * oldBucket, Bucket * newBucket, int newStart,
     for(i = 0; i < TAM_MAX_BUCKET; i++){
         keys[i] = oldBucket->keys[i];
         oldBucket->keys[i] = 0;
-        oldBucket->count--;
     }
 
+    oldBucket->count = 0;
+
     for(i = 0; i < TAM_MAX_BUCKET; i++){
-        int address = makeAddress(keys[i], dir.depth);
+        int address = make_address(keys[i], dir.depth);
 
         if((address >= newStart) && (address <= newEnd))
             bk_add_key(keys[i], newBucket);
